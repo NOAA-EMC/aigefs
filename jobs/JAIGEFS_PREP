@@ -1,0 +1,76 @@
+#!/bin/bash
+set -x
+
+# Prepend time to output
+export PS4=' $SECONDS + '
+
+# Create temporary working directory
+export DATA=${DATA:-${DATAROOT:?}/${jobid:?}}
+mkdir -p $DATA
+cd $DATA
+
+# Create directories to store gefs inputs and final output
+mkdir -p data output
+
+export cycle=${cycle:-t${cyc}z}
+setpdy.sh
+. ${DATA}/PDY
+echo $PDY
+
+export curr_PDYHH=${PDY}${cyc}
+export m1_PDYHH=$($NDATE -6 $curr_PDYHH)
+export m2_PDYHH=$($NDATE -12 $curr_PDYHH)
+echo "Current state: $curr_PDYHH"
+echo "6 hours earlier state: $m1_PDYHH"
+echo "12 hours earlier state: $m2_PDYHH"
+export m1_PDY=${m1_PDYHH:0:8} # first 8 characters
+export m1_cyc=${m1_PDYHH: -2} # last 2 characters
+export m2_PDY=${m2_PDYHH:0:8} # first 8 characters
+export m2_cyc=${m2_PDYHH: -2} # last 2 characters
+echo 'm1_PDY' $m1_PDY
+echo 'm1_cyc' $m1_cyc
+echo 'm2_PDY' $m2_PDY
+echo 'm2_cyc' $m2_cyc
+
+# Set up parent directory and all sub-directories for current model
+#export HOMEgefs_gc=${HOMEgefs_gc:-${PACKAGEROOT:?}}
+export FIXaigefs=${HOMEaigefs}/fix
+export USHaigefs=${HOMEaigefs}/ush
+
+export MAILTO=${MAILTO:-'nco.spa@noaa.gov'}
+
+# Variables used in com directory organization
+export NET=${NET:-aigefs}
+export RUN=${RUN:-aigefs}
+
+# Locations of incoming data
+export COMINgefs=${COMINgefs:-$(compath.py ${envir}/gefs/${gefs_ver})}/gefs.$PDY/$cyc/atmos
+export COMINgefsm1=${COMINgefsm1:-$(compath.py  ${envir}/gefs/${gefs_ver})}/gefs.$m1_PDY/$m1_cyc/atmos
+export COMINgefsm2=${COMINgefsm2:-$(compath.py  ${envir}/gefs/${gefs_ver})}/gefs.$m2_PDY/$m2_cyc/atmos
+
+# Locations of outgoing data
+#export COMOUT=${COMOUT:-$(compath.py -o $NET/$aigefs_ver/$RUN.$PDY)}/${cyc}
+export COMOUT=${COMOUT:-$(compath.py -o $NET/$aigefs_ver/$RUN.$PDY)}/${cyc}/model/${MEMBER}
+
+# Create output directories
+mkdir -p $COMOUT
+
+# Execute ex-script
+$HOMEaigefs/scripts/exaigefs_prep.sh
+export err=$?; err_chk
+
+# Post successful completion message
+msg="JOB $job HAS COMPLETED NORMALLY."
+postmsg $jlogfile "$msg"
+
+# Print exec output
+if [ -e $pgmout ]; then
+  cat $pgmout
+fi
+
+# Remove temporary working directory
+if [ "${KEEPDATA^^}" != YES ]; then
+  rm -rf $DATA
+fi
+
+date
