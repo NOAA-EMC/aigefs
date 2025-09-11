@@ -19,7 +19,7 @@ $USHaigefs/run_graphcast.py \
 export err=$?; err_chk
 
 for fh in $( seq -f "%03g" 0 6 384 ); do
-  file=$COMOUT/aigefs.${cycle}.pres.0p25.f${fh}.grib2
+  file=$COMOUT/aigefs.${cycle}.pres.f${fh}.grib2
   cpfs mlgefs.${cycle}.pres.0p25.f${fh}.grib2 ${file}
   cpfs mlgefs.${cycle}.pres.0p25.f${fh}.grib2.idx ${file}.idx
 
@@ -28,7 +28,7 @@ for fh in $( seq -f "%03g" 0 6 384 ); do
     $DBNROOT/bin/dbn_alert MODEL AIGEFS_GB2_IDX $job ${file}.idx
   fi
 
-  file=$COMOUT/aigefs.${cycle}.sfc.0p25.f${fh}.grib2
+  file=$COMOUT/aigefs.${cycle}.sfc.f${fh}.grib2
   cpfs mlgefs.${cycle}.sfc.0p25.f${fh}.grib2 ${file}
   cpfs mlgefs.${cycle}.sfc.0p25.f${fh}.grib2.idx ${file}.idx
 
