@@ -74,13 +74,8 @@ export SENDECF=${SENDECF:-YES}
  
 export HOMEaigefs=${HOMEaigefs:-${PACKAGEROOT}/aigefs.${aigefs_ver}}
 export EXECaigefs=${EXECaigefs:-$HOMEaigefs/exec}
-export FIXaigefs=${FIXaigefs:-$HOMEaigefs/fix}
-export USHaigefs=${USHaigefs:-$HOMEaigefs/ush}
-
-#export ERRSCRIPT=err_chk
-#export LOGSCRIPT=startmsg
-#export REDOUT='1>>'
-#export REDERR='2>'
+#export FIXaigefs=${FIXaigefs:-$HOMEaigefs/fix}
+#export USHaigefs=${USHaigefs:-$HOMEaigefs/ush}
 
 ##############################
 # Run setpdy and initialize PDY variables
@@ -92,16 +87,14 @@ setpdy.sh
 # Define COM directories
 ##############################################
 
-#CMD - COMIN will need to be fixed when aigefs_forecast com structure is updated
+# for individual member ensstat job
 export COMIN=${COMIN:-$(compath.py ${envir}/$NET/$aigefs_ver)}/$RUN.$PDY/$cyc
-export COMOUT=${COMOUT:-$(compath.py -o $NET/$aigefs_ver/$RUN.$PDY)}/${cyc}/products/ensstat
+export COMOUT=${COMOUT:-$(compath.py -o $NET/$aigefs_ver/$RUN.$PDY)}/${cyc}/ensstat/products/atmos/grib2
 
 mkdir -m 775 -p ${COMOUT}
 
 msg="HAS BEGUN on `hostname`"
 postmsg "$jlogfile" "$msg"
-
-env
 
 #####################
 # Execute the scripts
@@ -116,10 +109,12 @@ export DATAHOLD=$DATA
 export DATA=$DATAHOLD/dir_avgspr
 mkdir -p $DATA
 cd $DATA
-$USHaigefs/aigefsens_avgspr.sh                  
+#$USHaigefs/aigefsens_avgspr.sh                  
+$HOMEaigefs/scripts/exaigefs_ens_avgspr.sh                  
+export err=$?; err_chk
 
-cat $DATAHOLD/dir_avgspr_bc/$pgmout.360_avgspr
-cat $DATAHOLD/dir_avgspr/$pgmout.360_avgspr
+#cat $DATAHOLD/dir_avgspr_bc/$pgmout.360_avgspr
+#cat $DATAHOLD/dir_avgspr/$pgmout.360_avgspr
 
 msg="JOB COMPLETED NORMALLY"
 postmsg "$jlogfile" "$msg"
