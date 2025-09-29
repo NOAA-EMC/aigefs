@@ -1,0 +1,42 @@
+#!/bin/bash
+set -x
+
+# Prepend time to output
+export PS4=' $SECONDS + '
+
+# Create temporary working directory
+export DATA=${DATA:-${DATAROOT:?}/${jobid:?}}
+mkdir -p $DATA
+cd $DATA
+
+# Create directories to store gefs inputs and final output
+mkdir -p data output
+
+export cycle=${cycle:-t${cyc}z}
+setpdy.sh
+. ${DATA}/PDY
+echo $PDY
+
+# Variables used in com directory organization
+export NET=${NET:-aigefs}
+export RUN=${RUN:-aigefs}
+
+# loop over members and remove shared working directories
+for MEMBER in $(seq -w 0 6 384); do
+  export DATAshared=${DATAROOT:?}/${RUN}_forecast_mem${MEMBER}_${cyc}_${aigefs_ver%.*}_${envir}
+  # if directory exists, remove it
+  [ -d "$DATAshared" ] && rm -rf "$DATAshared"
+done
+
+# Execute ex-script
+#$HOMEaigefs/scripts/exaigefs_cleanup.sh
+#export err=$?; err_chk
+
+# Post successful completion message
+msg="JOB $job HAS COMPLETED NORMALLY."
+postmsg $jlogfile "$msg"
+
+# Remove temporary working directory
+if [ "${KEEPDATA^^}" != YES ]; then
+  rm -rf $DATA
+fi
