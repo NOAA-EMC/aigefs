@@ -49,8 +49,7 @@ export COMINgefsm1=${COMINgefsm1:-$(compath.py  ${envir}/gefs/${gefs_ver})}/gefs
 export COMINgefsm2=${COMINgefsm2:-$(compath.py  ${envir}/gefs/${gefs_ver})}/gefs.$m2_PDY/$m2_cyc/atmos
 
 # Locations of outgoing data
-#export COMOUT=${COMOUT:-$(compath.py -o $NET/$aigefs_ver/$RUN.$PDY)}/${cyc}
-export COMOUT=${COMOUT:-$(compath.py -o $NET/$aigefs_ver/$RUN.$PDY)}/${cyc}/model/${MEMBER}
+export COMOUT=${COMOUT:-$(compath.py -o $NET/$aigefs_ver/$RUN.$PDY)}/${cyc}/${MEMBER}/model/atmos/init
 
 # Create output directories
 mkdir -p $COMOUT
