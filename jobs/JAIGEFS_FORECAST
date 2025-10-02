@@ -1,0 +1,57 @@
+#!/bin/bash
+set -x
+
+# Prepend time to output
+export PS4=' $SECONDS + '
+
+# Variables used in com directory organization
+export NET=${NET:-aigefs}
+export RUN=${RUN:-aigefs}
+
+# Create temporary working directory
+export DATAshared=${DATAROOT:?}/${RUN}_forecast_${MEMBER}_${cyc}_${aigefs_ver%.*}_${envir}
+export DATA=${DATAshared}/${jobid:?}
+mkdir -p $DATA
+cd $DATA
+
+export cycle=${cycle:-t${cyc}z}
+setpdy.sh
+. ${DATA}/PDY
+echo $PDY
+
+export curr_PDYHH=${PDY}${cyc}
+# Set up parent directory and all sub-directories for current model
+export FIXaigefs=${HOMEaigefs}/fix
+export USHaigefs=${HOMEaigefs}/ush
+export SETEVENTSH=${USHaigefs}/set_event.sh
+
+export MAILTO=${MAILTO:-'nco.spa@noaa.gov'}
+
+# Locations of incoming data
+export COMIN=${COMIN:-$(compath.py ${envir}/$NET/$aigefs_ver)}/$RUN.$PDY/${cyc}/${MEMBER}/model/atmos/init
+
+# Locations of outgoing data
+export COMOUT=${COMOUT:-$(compath.py -o $NET/$aigefs_ver/$RUN.$PDY)}/${cyc}/${MEMBER}/model/atmos/grib2
+
+# Create output directories
+mkdir -p $COMOUT
+
+# Execute ex-script
+$HOMEaigefs/scripts/exaigefs_forecast.sh
+export err=$?; err_chk
+
+# Post successful completion message
+msg="JOB $job HAS COMPLETED NORMALLY."
+postmsg $jlogfile "$msg"
+
+# Print exec output
+if [ -e $pgmout ]; then
+  cat $pgmout
+fi
+
+# Remove temporary working directory
+if [ "${KEEPDATA^^}" != YES ]; then
+  rm -rf $DATA
+fi
+
+date
