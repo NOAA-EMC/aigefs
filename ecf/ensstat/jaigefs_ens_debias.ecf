@@ -1,0 +1,40 @@
+#PBS -N aigefs_ens_debias_f%FHR%_%CYC%
+#PBS -j oe
+#PBS -S /bin/bash
+#PBS -q %QUEUE%
+#PBS -l walltime=00:10:00
+#PBS -A %PROJ%-%PROJENVIR%
+#PBS -l select=1:ncpus=1:mpiprocs=1:mem=4GB
+#PBS -l debug=true
+
+export model=aigefs
+%include <head.h>
+%include <envir-p1.h>
+
+export cyc=%CYC%
+export fh=%FHR%
+
+module load intel/${intel_ver:?}
+module load wgrib2/${wgrib2_ver:?}
+module load libjpeg/${libjpeg_ver:?}
+
+module list
+
+# CALL executable job script here
+$HOMEaigefs/jobs/JAIGEFS_ENS_DEBIAS
+
+
+%include <tail.h>
+%manual
+######################################################################
+# Purpose: Calculates the mean and spread for the 00Z aigefs ensemble.
+######################################################################
+
+######################################################################
+# Job specific troubleshooting instructions:
+#  see generic troubleshoot manual page
+#
+######################################################################
+
+# include manual page below
+%end
