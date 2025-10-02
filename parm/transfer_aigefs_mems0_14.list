@@ -35,8 +35,12 @@ _COMROOT_/aigefs/_SHORTVER_/aigefs._PDY_/
 + /??/mem00[0-9]/model/atmos/grib2/aigefs.t??z.pres.f???.grib2.idx
 + /??/mem00[0-9]/model/atmos/grib2/aigefs.t??z.sfc.f???.grib2
 + /??/mem00[0-9]/model/atmos/grib2/aigefs.t??z.sfc.f???.grib2.idx
++ /??/mem01[0-4]/
++ /??/mem01[0-4]/model/
 + /??/mem01[0-4]/model/init/
 + /??/mem01[0-4]/model/init/aigefs.t??z.ic.nc
++ /??/mem01[0-4]/model/atmos/
++ /??/mem01[0-4]/model/atmos/grib2
 + /??/mem01[0-4]/model/atmos/grib2/aigefs.t??z.pres.f???.grib2
 + /??/mem01[0-4]/model/atmos/grib2/aigefs.t??z.pres.f???.grib2.idx
 + /??/mem01[0-4]/model/atmos/grib2/aigefs.t??z.sfc.f???.grib2
@@ -55,8 +59,12 @@ _COMROOT_/aigefs/_SHORTVER_/aigefs._PDYm1_/
 + /??/mem00[0-9]/model/atmos/grib2/aigefs.t??z.pres.f???.grib2.idx
 + /??/mem00[0-9]/model/atmos/grib2/aigefs.t??z.sfc.f???.grib2
 + /??/mem00[0-9]/model/atmos/grib2/aigefs.t??z.sfc.f???.grib2.idx
++ /??/mem01[0-4]/
++ /??/mem01[0-4]/model/
 + /??/mem01[0-4]/model/init/
 + /??/mem01[0-4]/model/init/aigefs.t??z.ic.nc
++ /??/mem01[0-4]/model/atmos/
++ /??/mem01[0-4]/model/atmos/grib2
 + /??/mem01[0-4]/model/atmos/grib2/aigefs.t??z.pres.f???.grib2
 + /??/mem01[0-4]/model/atmos/grib2/aigefs.t??z.pres.f???.grib2.idx
 + /??/mem01[0-4]/model/atmos/grib2/aigefs.t??z.sfc.f???.grib2

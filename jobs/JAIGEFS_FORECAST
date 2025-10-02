@@ -2,7 +2,7 @@
 set -x
 
 # Prepend time to output
-export PS4=' $SECONDS + '
+export PS4='+ $SECONDS + '
 
 # Variables used in com directory organization
 export NET=${NET:-aigefs}

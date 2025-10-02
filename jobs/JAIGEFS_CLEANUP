@@ -2,7 +2,7 @@
 set -x
 
 # Prepend time to output
-export PS4=' $SECONDS + '
+export PS4='+ $SECONDS + '
 
 # Create temporary working directory
 export DATA=${DATA:-${DATAROOT:?}/${jobid:?}}
@@ -22,8 +22,8 @@ export NET=${NET:-aigefs}
 export RUN=${RUN:-aigefs}
 
 # loop over members and remove shared working directories
-for MEMBER in $(seq -w 0 6 384); do
-  export DATAshared=${DATAROOT:?}/${RUN}_forecast_mem${MEMBER}_${cyc}_${aigefs_ver%.*}_${envir}
+for MEMBER in $(seq -w 0 30); do
+  export DATAshared=${DATAROOT:?}/${RUN}_forecast_mem0${MEMBER}_${cyc}_${aigefs_ver%.*}_${envir}
   # if directory exists, remove it
   [ -d "$DATAshared" ] && rm -rf "$DATAshared"
 done
